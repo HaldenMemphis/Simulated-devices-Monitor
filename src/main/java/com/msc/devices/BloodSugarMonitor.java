@@ -9,7 +9,7 @@ import org.kaaproject.kaa.client.KaaClient;
 import org.kaaproject.kaa.client.SimpleKaaClientStateListener;
 import org.kaaproject.kaa.client.logging.strategies.RecordCountLogUploadStrategy;
 import org.kaaproject.kaa.schema.Monitor.Configuration;
-import org.kaaproject.kaa.scheme.Monitor.bloodSugarMonitorMessageV01;
+import org.kaaproject.kaa.scheme.Monitor.BloodSugarMonitorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,9 +110,9 @@ public class BloodSugarMonitor {
                     new Runnable() {
                         @Override
                         public void run() {
-                            bloodSugarMonitorMessageV01 bloodSugarMonitorBody = getBloodSugarMonitorBody();
-                            kaaClient.addLogRecord(bloodSugarMonitorBody);
-                            LOG.info("Sampled Blood Sugar Data: {}", bloodSugarMonitorBody.getBloodSugar());
+                            BloodSugarMonitorMessage bloodSugarMonitorMessageBody = getBloodSugarMonitorBody();
+                            kaaClient.addLogRecord(bloodSugarMonitorMessageBody);
+                            LOG.info("Sampled Blood Sugar Data: {}", bloodSugarMonitorMessageBody.getBloodSugar());
                         }
                     }, 0, time, TimeUnit.MILLISECONDS);
         }
@@ -135,7 +135,7 @@ public class BloodSugarMonitor {
                 new Runnable() {
                     @Override
                     public void run() {
-                        bloodSugarMonitorMessageV01 bloodSugarMonitorBody = getBloodSugarMonitorBody();
+                        BloodSugarMonitorMessage bloodSugarMonitorBody = getBloodSugarMonitorBody();
                         kaaClient.addLogRecord(bloodSugarMonitorBody);
                         LOG.info("Sampled Blood Sugar Data: {}", bloodSugarMonitorBody.getBloodSugar());
                     }
@@ -143,9 +143,9 @@ public class BloodSugarMonitor {
     }
 
 
-    private static bloodSugarMonitorMessageV01 getBloodSugarMonitorBody() {
-        bloodSugarMonitorMessageV01 bloodSugarMonitorBody = new bloodSugarMonitorMessageV01(Mac.generateRandomMacAddress(), getRandomBloodSugarData(), System.currentTimeMillis());
-        return bloodSugarMonitorBody;
+    private static BloodSugarMonitorMessage getBloodSugarMonitorBody() {
+        BloodSugarMonitorMessage bloodSugarMonitorMessageBody = new BloodSugarMonitorMessage(Mac.generateRandomMacAddress(), getRandomBloodSugarData(), System.currentTimeMillis());
+        return bloodSugarMonitorMessageBody;
     }
 
     private static float getRandomBloodSugarData() {
