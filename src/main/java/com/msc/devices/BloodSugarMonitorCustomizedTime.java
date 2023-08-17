@@ -30,7 +30,7 @@ public class BloodSugarMonitorCustomizedTime {
 
     private static final long START_DELAY = 1L;
 
-    public static final int TIME_MILISECONDS = 1;
+    public static final int TIME_MILISECONDS = 10000;
 
     private static final Logger LOG = LoggerFactory.getLogger(BloodSugarMonitorCustomizedTime.class);
     private static KaaClient kaaClient;
@@ -146,7 +146,7 @@ public class BloodSugarMonitorCustomizedTime {
 
 
     private static BloodSugarMonitorMessage getBloodSugarMonitorBody() {
-        BloodSugarMonitorMessage bloodSugarMonitorMessageBody = new BloodSugarMonitorMessage(Mac.generateRandomMacAddress(), getRandomBloodSugarData(), System.currentTimeMillis());
+        BloodSugarMonitorMessage bloodSugarMonitorMessageBody = new BloodSugarMonitorMessage(Mac.generateRandomMacAddress(), getRandomBloodSugarData(), System.currentTimeMillis(),null,null);
         return bloodSugarMonitorMessageBody;
     }
 

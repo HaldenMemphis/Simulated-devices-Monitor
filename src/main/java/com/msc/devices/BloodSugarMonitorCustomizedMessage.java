@@ -1,12 +1,12 @@
 package com.msc.devices;
 
 import com.msc.devices.utils.Mac;
-import org.kaaproject.kaa.client.configuration.base.ConfigurationListener;
-import org.kaaproject.kaa.client.configuration.base.SimpleConfigurationStorage;
 import org.kaaproject.kaa.client.DesktopKaaPlatformContext;
 import org.kaaproject.kaa.client.Kaa;
 import org.kaaproject.kaa.client.KaaClient;
 import org.kaaproject.kaa.client.SimpleKaaClientStateListener;
+import org.kaaproject.kaa.client.configuration.base.ConfigurationListener;
+import org.kaaproject.kaa.client.configuration.base.SimpleConfigurationStorage;
 import org.kaaproject.kaa.client.logging.strategies.RecordCountLogUploadStrategy;
 import org.kaaproject.kaa.schema.Monitor.Configuration;
 import org.kaaproject.kaa.scheme.Monitor.BloodSugarMonitorMessage;
@@ -26,11 +26,19 @@ import java.util.concurrent.TimeUnit;
  * @author: yfliu
  * @create: 2023-07-04 19:58
  **/
-public class BloodSugarMonitor {
+public class BloodSugarMonitorCustomizedMessage {
 
-    private static final long START_DELAY = 1000L;
+    private static final long START_DELAY = 1L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(BloodSugarMonitor.class);
+    public static final int TIME_MILISECONDS = 1000;
+
+    public static final String  mac = "d4:42:30:e3:74:92";
+
+    private static final String deviceType = "Monitor";
+
+    private static final String deviceName = "BloodSugarMonitorTest";
+
+    private static final Logger LOG = LoggerFactory.getLogger(BloodSugarMonitorCustomizedMessage.class);
     private static KaaClient kaaClient;
 
     private static ScheduledFuture<?> scheduledFuture;
@@ -38,7 +46,7 @@ public class BloodSugarMonitor {
 
 
     public static void main(String[] args) {
-        LOG.info(BloodSugarMonitor.class.getSimpleName() + " app starting!");
+        LOG.info(BloodSugarMonitorCustomizedMessage.class.getSimpleName() + " app starting!");
 
         scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
@@ -69,7 +77,7 @@ public class BloodSugarMonitor {
             @Override
             public void onConfigurationUpdate(Configuration configuration) {
                 LOG.info("Received configuration data. New sample period: {}", configuration.getMessageSendTimeMins());
-                onChangedConfiguration(TimeUnit.MINUTES.toMillis(configuration.getMessageSendTimeMins()));
+                onChangedConfiguration(TimeUnit.MINUTES.toMillis(TIME_MILISECONDS));
             }
         });
 
@@ -96,7 +104,7 @@ public class BloodSugarMonitor {
             LOG.info("Kaa client started");
             Configuration configuration = kaaClient.getConfiguration();
             LOG.info("Default sample period: {}", configuration.getMessageSendTimeMins());
-            onKaaStarted(TimeUnit.MINUTES.toMillis(configuration.getMessageSendTimeMins()));
+            onKaaStarted(TimeUnit.MILLISECONDS.toMillis(TIME_MILISECONDS));
         }
 
         private static void onKaaStarted(long time) {
@@ -144,7 +152,7 @@ public class BloodSugarMonitor {
 
 
     private static BloodSugarMonitorMessage getBloodSugarMonitorBody() {
-        BloodSugarMonitorMessage bloodSugarMonitorMessageBody = new BloodSugarMonitorMessage(Mac.generateRandomMacAddress(), getRandomBloodSugarData(), System.currentTimeMillis(),null,null);
+        BloodSugarMonitorMessage bloodSugarMonitorMessageBody = new BloodSugarMonitorMessage(mac, getRandomBloodSugarData(), System.currentTimeMillis(),deviceType,deviceName);
         return bloodSugarMonitorMessageBody;
     }
 
